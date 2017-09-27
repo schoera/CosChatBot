@@ -1,0 +1,16 @@
+{
+  "name": "Budbot",
+  "version": "1.0.0",
+  "description": "chatbot @ fedexday 2017",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "botbuilder": "^3.10.2",
+    "dotenv-extended": "^2.0.1",
+    "restify": "^6.0.1"
+  }
+}
