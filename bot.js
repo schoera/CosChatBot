@@ -5,6 +5,8 @@ var restify = require('restify');
 var builder = require('botbuilder');
 var dialog_modules = require('./dialog_modules');
 
+// Test-Kommentar für Testpush
+
 // Setup Restify Server
 var server = restify.createServer();
 server.listen(process.env.port || process.env.PORT || 3978, function () {
@@ -39,6 +41,23 @@ var bot = new builder.UniversalBot(connector, [
     }*/
 ]);
 
+bot.on('conversationUpdate', function (message) {
+    if (message.membersAdded && message.membersAdded.length > 0) {
+        var membersAdded = message.membersAdded
+            .map(function (m) {
+                var isSelf = m.id === message.address.bot.id;
+                return (isSelf ? message.address.bot.name : m.name) || '' + ' (Id: ' + m.id + ')';
+            })
+            .join(', ');
+
+        if (membersAdded == "User") {
+            bot.send(new builder.Message()
+                .address(message.address)
+                .text('Welcome ' + membersAdded));
+        }
+    }
+});
+
 
 bot.dialog('meaningOfLife', dialog_modules.meaningOfLifeDialog);
 
@@ -46,10 +65,10 @@ bot.dialog('meaningOfLife', dialog_modules.meaningOfLifeDialog);
 // Receive messages from the user and respond by echoing each message back (prefixed with 'You said:')
 var bot = new builder.UniversalBot(connector, function (session) {
   bot.set('persistConversationData', true);
-  
+
   var msg = session.message;
   //if (initial == 0) {
- 
+
   if (false && !username) {
     session.beginDialog('greetings');
   } else if (msg.attachments && msg.attachments.length > 0) {
