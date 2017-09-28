@@ -38,6 +38,23 @@ var bot = new builder.UniversalBot(connector, [
     }
 ]);
 
+bot.on('conversationUpdate', function (message) {
+    if (message.membersAdded && message.membersAdded.length > 0) {
+        var membersAdded = message.membersAdded
+            .map(function (m) {
+                var isSelf = m.id === message.address.bot.id;
+                return (isSelf ? message.address.bot.name : m.name) || '' + ' (Id: ' + m.id + ')';
+            })
+            .join(', ');
+
+        if (membersAdded == "User") {
+            bot.send(new builder.Message()
+                .address(message.address)
+                .text('Welcome ' + membersAdded));
+        }
+    }
+});
+
 
 bot.dialog('meaningOfLife', dialog_modules.meaningOfLifeDialog);
 
