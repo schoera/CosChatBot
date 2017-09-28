@@ -8,6 +8,10 @@
   },
   "author": "",
   "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/schoera/CosChatBot.git"
+  },
   "dependencies": {
     "botbuilder": "^3.10.2",
     "dotenv-extended": "^2.0.1",
