@@ -1,5 +1,6 @@
 
 var builder = require('botbuilder');
+var dialog_messages = require('./dialog_msg').msg;
 
 
 exports.echo = function(session){
@@ -19,6 +20,48 @@ exports.echo_attachment = function(session){
         ]
     }
 };
+
+abortMatcher = function(){
+    return /(give up|quit|skip|yes)/i
+}
+
+exports.hrQuestionsDialog = {
+    /// HR PLZ Frage
+    'plz': new builder.IntentDialog()
+        .onBegin(function (session, args) {
+            // Save args passed to prompt
+            // session.dialogData.retryPrompt = args.retryPrompt || dialog_messages["unclear-user-response"];
+            // Send initial prompt
+            // - This isn't a waterfall so you shouldn't call any of the built-in Prompts.
+            session.send( dialog_messages["hr-question-plz"] );
+        })
+        .matches(abortMatcher(), function (session) {
+            // Return 'false' to indicate they gave up
+            session.endDialogWithResult({ response: false });
+        })
+        .matches(/\d+/i, function (session) {
+            // Return 'false' to indicate they gave up
+            session.endDialogWithResult({ response: true });
+        })
+        .onDefault(function (session) {
+            // Validate users reply.
+            //if (session.message.text == '42') {
+                // Return 'true' to indicate success
+            //    session.endDialogWithResult({ response: true });
+            //} else {
+                // Re-prompt user
+                //session.send(session.dialogData.retryPrompt);
+                session.send( dialog_messages["unclear-user-response"] );
+            //}
+        }),
+
+    /// HR Wohn Frage
+
+}
+
+
+/** EXAMPLES **/
+
 
 exports.meaningOfLifeDialog = new builder.IntentDialog()
     .onBegin(function (session, args) {
