@@ -1,5 +1,5 @@
 {
-  "name": "Cosmos HR-Angebot ChatBot",
+  "name": "CosChatBot",
   "version": "1.0.0",
   "description": "chatbot @ fedexday 2017",
   "main": "bot.js",
@@ -16,6 +16,7 @@
   "dependencies": {
     "botbuilder": "^3.10.2",
     "dotenv-extended": "^2.0.1",
-    "restify": "^6.0.1"
+    "restify": "^6.0.1",
+    "restify-clients": "^1.5.2"
   }
 }

@@ -1,6 +1,15 @@
 
 var builder = require('botbuilder');
 var dialog_messages = require('./dialog_msg').msg;
+var restify = require('restify-clients');
+
+var restClient = restify.createJsonClient({
+  //url: 'http://15c6931e.ngrok.io',
+  url: 'http://nb767.cosmos.local:8087',
+  version: '*'
+});
+
+
 
 
 exports.echo = function(session){
@@ -94,17 +103,52 @@ exports.hrQuestionsDialog = {
 }
 
 exports.calculateHrTarif = function(plz, wohnflaeche, tarif){
-    /*
-        {"tarifHv" : "C", "selbstbeteiligung" : true,"wohnflaeche" : 150,"glasversicherung" : true,"hrPlz" : 66822}
-        http://nb767.cosmos.local:8087/hausratRechnen
-        http://15c6931e.ngrok.io/hausratRechnen
-    */
-  return postRest(tarif, wohnflaeche, tarif);
+  console.log("--------------calculateHrTarif--------------------")
+  jsonObject = JSON.parse('{"tarifHv" : "' + tarif + '", "selbstbeteiligung" : true, "wohnflaeche" : ' + wohnflaeche + ', "glasversicherung" : true, "hrPlz" : ' + plz + '}');
+  restClient.post('/hausratRechnen', jsonObject, function(err, req, res, obj) {
+    //assert.ifError(err);
+    console.log("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
+    console.log('%d -> %j', res.statusCode, res.headers);
+    console.log('%j', obj);
+    console.log("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
+  });
+
+
 }
 
-exports.postRest = function(tarifHv, wohnflaeche, hrPlz) {
+/*exports.getRestData = function (stream) {
+  return new Promise(
+    function (resolve, reject) {
+      var requestData = {
+        url: 'http://15c6931e.ngrok.io/hausratRechnen',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      };
+
+      request.post(requestData, function (error, response, body) {
+        if (error) {
+          reject(error);
+        }
+        else if (response.statusCode !== 200) {
+          reject(body);
+        }
+        else {
+          resolve(JSON.parse(body).visuallySimilarProducts);
+        }
+      });
+    }
+  );
+};  */
+
+/*exports.calculateHrTarif = function(plz, wohnflaeche, tarif){
+  /*
+   {"tarifHv" : "C", "selbstbeteiligung" : true,"wohnflaeche" : 150,"glasversicherung" : true,"hrPlz" : 66822}
+   http://nb767.cosmos.local:8087/hausratRechnen
+   http://15c6931e.ngrok.io/hausratRechnen
+   */
   // Sending and receiving data in JSON format using POST method
-  var xhr = new XMLHttpRequest();
+  /*var xhr = new XMLHttpRequest();
   var url = "http://15c6931e.ngrok.io/hausratRechnen";
   xhr.open("POST", url, true);
   xhr.setRequestHeader("Content-type", "application/json");
@@ -114,9 +158,10 @@ exports.postRest = function(tarifHv, wohnflaeche, hrPlz) {
       console.log(json);
     }
   };
-  var data = JSON.stringify('{"tarifHv" : "' + tarifHv + '", "selbstbeteiligung" : true, "wohnflaeche" : ' + wohnflaeche + ', "glasversicherung" : true, "hrPlz" : ' + hrPlz + '}');
+  var data = JSON.stringify('{"tarifHv" : "' + tarif + '", "selbstbeteiligung" : true, "wohnflaeche" : ' + wohnflaeche + ', "glasversicherung" : true, "hrPlz" : ' + plz + '}');
   xhr.send(data);
-}
+}    */
+
 
 
 /** EXAMPLES **/
