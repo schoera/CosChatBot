@@ -7,7 +7,7 @@ var zitate = require('./zitate');
 
 // Setup Restify Server
 var server = restify.createServer();
-server.listen(process.env.port || process.env.PORT || 3979, function () {
+server.listen(process.env.port || process.env.PORT || 3978, function () {
    console.log('Bot hört auf: %s', server.url);
 });
 
