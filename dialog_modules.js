@@ -53,9 +53,9 @@ exports.hrQuestionsDialog = {
             //} else {
                 // Re-prompt user
                 //session.send(session.dialogData.retryPrompt);
-                session.send( 
+                session.send(
                     dialog_messages["unclear-user-response"] +
-                    dialog_messages["invalid-response-plz"] 
+                    dialog_messages["invalid-response-plz"]
                 );
             //}
         }),
@@ -94,10 +94,10 @@ exports.hrQuestionsDialog = {
 }
 
 exports.calculateHrTarif = function(plz, wohnflaeche, tarif){
-    /*    
+    /*
         {"tarifHv" : "C", "selbstbeteiligung" : true,"wohnflaeche" : 150,"glasversicherung" : true,"hrPlz" : 66822}
         http://nb767.cosmos.local:8087/hausratRechnen
-        http://15c6931e.ngrok.io
+        http://15c6931e.ngrok.io/hausratRechnen
     */
     if (tarif == 'B'){
         return 1.11;
@@ -148,7 +148,7 @@ exports.exampleCards = function(session){
             .buttons([
                 builder.CardAction.openUrl(session, 'https://azure.microsoft.com/en-us/services/storage/', 'Learn More')
             ]),
-    
+
         "thumb1": new builder.ThumbnailCard(session)
             .title('DocumentDB')
             .subtitle('Blazing fast, planet-scale NoSQL')
@@ -159,7 +159,7 @@ exports.exampleCards = function(session){
             .buttons([
                 builder.CardAction.openUrl(session, 'https://azure.microsoft.com/en-us/services/documentdb/', 'Learn More')
             ]),
-    
+
         "hero2": new builder.HeroCard(session)
             .title('Azure Functions')
             .subtitle('Process events with a serverless code architecture')
@@ -170,7 +170,7 @@ exports.exampleCards = function(session){
             .buttons([
                 builder.CardAction.openUrl(session, 'https://azure.microsoft.com/en-us/services/functions/', 'Learn More')
             ]),
-    
+
         "thumb2": new builder.ThumbnailCard(session)
             .title('Cognitive Services')
             .subtitle('Build powerful intelligence into your applications to enable natural and contextual interactions')
