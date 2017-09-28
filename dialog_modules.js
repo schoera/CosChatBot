@@ -22,7 +22,7 @@ exports.echo_attachment = function(session){
 };
 
 abortMatcher = function(){
-    return /(give up|quit|skip|yes)/i
+    return /(give up|quit|skip|yes|abbruch|abbrechen)/i
 }
 
 exports.hrQuestionsDialog = {
@@ -34,6 +34,35 @@ exports.hrQuestionsDialog = {
             // Send initial prompt
             // - This isn't a waterfall so you shouldn't call any of the built-in Prompts.
             session.send( dialog_messages["hr-question-plz"] );
+        })
+        .matches(abortMatcher(), function (session) {
+            // Return 'false' to indicate they gave up
+            session.endDialogWithResult({ response: false });
+        })
+        .matches(/\d{5}/i, function (session) {
+            // Return 'false' to indicate they gave up
+            session.endDialogWithResult({ response: true });
+        })
+        .onDefault(function (session) {
+            // Validate users reply.
+            //if (session.message.text == '42') {
+                // Return 'true' to indicate success
+            //    session.endDialogWithResult({ response: true });
+            //} else {
+                // Re-prompt user
+                //session.send(session.dialogData.retryPrompt);
+                session.send( dialog_messages["unclear-user-response"] );
+            //}
+        }),
+
+    /// HR Wohnfläche Frage
+    'wohnflaeche': new builder.IntentDialog()
+        .onBegin(function (session, args) {
+            // Save args passed to prompt
+            // session.dialogData.retryPrompt = args.retryPrompt || dialog_messages["unclear-user-response"];
+            // Send initial prompt
+            // - This isn't a waterfall so you shouldn't call any of the built-in Prompts.
+            session.send( dialog_messages["hr-question-wohnflaeche"] );
         })
         .matches(abortMatcher(), function (session) {
             // Return 'false' to indicate they gave up
@@ -54,8 +83,6 @@ exports.hrQuestionsDialog = {
                 session.send( dialog_messages["unclear-user-response"] );
             //}
         }),
-
-    /// HR Wohn Frage
 
 }
 

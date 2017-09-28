@@ -35,9 +35,18 @@ var bot = new builder.UniversalBot(connector, [
     function (session, results) {
         // Check their answer
         if (results.response) {
-            session.send("OK, Danke");
+            //session.send("OK, Danke");
+            session.beginDialog('hr_question_wohnflaeche', {});
         } else {
-            session.send("ABBRUCH");
+            session.send(dialog_messages['user-abort']);
+        }
+    },
+    function (session, results) {
+        // Check their answer
+        if (results.response) {
+            session.send("OK, Danke ... hier kommt die Berechnung");
+        } else {
+            session.send(dialog_messages['user-abort']);
         }
     }
 ]);
@@ -65,3 +74,4 @@ bot.on('conversationUpdate', function (message) {
 
 
 bot.dialog('hr_question_plz', dialog_modules.hrQuestionsDialog['plz']);
+bot.dialog('hr_question_wohnflaeche', dialog_modules.hrQuestionsDialog['wohnflaeche']);
