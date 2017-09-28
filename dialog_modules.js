@@ -48,9 +48,9 @@ exports.hrQuestionsDialog = {
             // Return 'false' to indicate they gave up
             session.endDialogWithResult({ response: false });
         })
-        .matches(/^\d{5}$/i, function (session) {
+        .matches(/\d{5}/i, function (session) {
             // Return 'false' to indicate they gave up
-            session.userData.plz = session.message.text;
+            session.userData.plz = session.message.text.match(/(\d{5})/)[0];
             session.save();
             session.endDialogWithResult({ response: true });
         })
@@ -84,7 +84,7 @@ exports.hrQuestionsDialog = {
         })
         .matches(/\d+/i, function (session) {
             // Return 'false' to indicate they gave up
-            session.userData.wohnflaeche = session.message.text;
+            session.userData.wohnflaeche = session.message.text.match(/(\d+)/)[0];
             session.save();
             session.endDialogWithResult({ response: true });
         })
