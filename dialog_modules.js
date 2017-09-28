@@ -32,7 +32,7 @@ exports.echo_attachment = function(session){
 
 abortMatcher = function(){
     return /(give up|quit|skip|yes|abbruch|abbrechen)/i
-}
+};
 
 exports.hrQuestionsDialog = {
     /// HR PLZ Frage
@@ -98,23 +98,32 @@ exports.hrQuestionsDialog = {
                 //session.send(session.dialogData.retryPrompt);
                 session.send( dialog_messages["unclear-user-response"] );
             //}
-        }),
+        })
 
-}
+};
 
 exports.calculateHrTarif = function(plz, wohnflaeche, tarif){
-  console.log("--------------calculateHrTarif--------------------")
-  jsonObject = JSON.parse('{"tarifHv" : "' + tarif + '", "selbstbeteiligung" : true, "wohnflaeche" : ' + wohnflaeche + ', "glasversicherung" : true, "hrPlz" : ' + plz + '}');
-  restClient.post('/hausratRechnen', jsonObject, function(err, req, res, obj) {
-    //assert.ifError(err);
-    console.log("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
-    console.log('%d -> %j', res.statusCode, res.headers);
-    console.log('%j', obj);
-    console.log("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
-  });
-
-
-}
+  console.log("--------------calculateHrTarif--------------------");
+  var jsonObject = JSON.parse('{"tarifHv" : "' + tarif + '", "selbstbeteiligung" : true, "wohnflaeche" : ' + wohnflaeche + ', "glasversicherung" : true, "hrPlz" : ' + plz + '}');
+  return new Promise(
+    function (resolve, reject) {
+      restClient.post('/hausratRechnen', jsonObject, function(error, request, response, responseObject) {
+        //assert.ifError(err);
+        if(response.statusCode !== 200) {
+          console.log("Fehler mit Statuscode: " + response.statusCode);
+          console.log('%j', responseObject);
+          console.log('%j', response.headers);
+          reject(error);
+        }
+        else {
+          //console.log('%j', responseObject);
+          console.log('Beitrag: ' + responseObject["beitragHv"]);
+          resolve(responseObject["beitragHv"]);
+        }
+      });
+    }
+  );
+};
 
 /*exports.getRestData = function (stream) {
   return new Promise(
@@ -182,7 +191,7 @@ exports.meaningOfLifeDialog = new builder.IntentDialog()
     })
     .onDefault(function (session) {
         // Validate users reply.
-        if (session.message.text == '42') {
+        if (session.message.text === '42') {
             // Return 'true' to indicate success
             session.endDialogWithResult({ response: true });
         } else {
@@ -243,8 +252,8 @@ exports.exampleCards = function(session){
             exampleCards['hero1'],
             exampleCards['hero2'],
             exampleCards['thumb1'],
-            exampleCards['thumb2'],
+            exampleCards['thumb2']
         ]);
-}
+};
 
 // session.send( dialog_modules.exampleCards(session) );

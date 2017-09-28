@@ -33,7 +33,7 @@ var default_waterfall_handler = function(callback){
             session.send(dialog_messages['user-abort']);
         }
     }
-}
+};
 
 // Receive messages from the user and respond by echoing each message back (prefixed with 'You said:')
 var bot = new builder.UniversalBot(connector, [
@@ -46,17 +46,20 @@ var bot = new builder.UniversalBot(connector, [
         session.beginDialog('hr_question_wohnflaeche', {});
     }),
     default_waterfall_handler(function (session, results){
-        var plz = session.userData.plz;
-        var wohnflaeche = session.userData.wohnflaeche;
-        session.send(
-            "OK, Danke ... hier kommt die Berechnung\n" + 
+      var plz = session.userData.plz,
+        wohnflaeche = session.userData.wohnflaeche;
+      dialog_modules.calculateHrTarif(plz, wohnflaeche, "B").then(function(basis) {
+        dialog_modules.calculateHrTarif(plz, wohnflaeche, "C").then(function (comfort) {
+          session.send(
+            "OK, Danke ... hier kommt die Berechnung\n" +
             //"Daten: PLZ "+ session.userData.plz +" Wohnfläche "+ session.userData.wohnflaeche +"\n"+
-            "Basis: "+ dialog_modules.calculateHrTarif(plz, wohnflaeche, "B") +"\n"+
-            "Comfort: "+ dialog_modules.calculateHrTarif(plz, wohnflaeche, "C")
+            "Basis: " + basis + "\n" +
+            "Comfort: " + comfort
             // getCalculationResponse
-        );
-        //session.beginDialog('hr_question_wohnflaeche', {});
-    }),
+          );
+        })
+      });
+    })
 ]);
 
 /*
