@@ -25,6 +25,15 @@ var connector = new builder.ChatConnector({
 // Listen for messages from users
 server.post('/api/messages', connector.listen());
 
+var default_waterfall_handler = function(callback){
+    return function(session, results){
+        if (results.response) {
+            callback(session, results);
+        } else {
+            session.send(dialog_messages['user-abort']);
+        }
+    }
+}
 
 // Receive messages from the user and respond by echoing each message back (prefixed with 'You said:')
 var bot = new builder.UniversalBot(connector, [
@@ -32,23 +41,22 @@ var bot = new builder.UniversalBot(connector, [
         session.beginDialog('hr_question_plz', {});
         //session.send( dialog_modules.exampleCards(session) );
     },
-    function (session, results) {
-        // Check their answer
-        if (results.response) {
-            //session.send("OK, Danke");
-            session.beginDialog('hr_question_wohnflaeche', {});
-        } else {
-            session.send(dialog_messages['user-abort']);
-        }
-    },
-    function (session, results) {
-        // Check their answer
-        if (results.response) {
-            session.send("OK, Danke ... hier kommt die Berechnung");
-        } else {
-            session.send(dialog_messages['user-abort']);
-        }
-    }
+    default_waterfall_handler(function (session, results){
+        //session.send("OK, Danke");
+        session.beginDialog('hr_question_wohnflaeche', {});
+    }),
+    default_waterfall_handler(function (session, results){
+        var plz = session.userData.plz;
+        var wohnflaeche = session.userData.wohnflaeche;
+        session.send(
+            "OK, Danke ... hier kommt die Berechnung\n" + 
+            //"Daten: PLZ "+ session.userData.plz +" Wohnfläche "+ session.userData.wohnflaeche +"\n"+
+            "Basis: "+ dialog_modules.calculateHrTarif(plz, wohnflaeche, "B") +"\n"+
+            "Comfort: "+ dialog_modules.calculateHrTarif(plz, wohnflaeche, "C")
+            // getCalculationResponse
+        );
+        //session.beginDialog('hr_question_wohnflaeche', {});
+    }),
 ]);
 
 /*

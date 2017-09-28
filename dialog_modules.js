@@ -39,8 +39,10 @@ exports.hrQuestionsDialog = {
             // Return 'false' to indicate they gave up
             session.endDialogWithResult({ response: false });
         })
-        .matches(/\d{5}/i, function (session) {
+        .matches(/^\d{5}$/i, function (session) {
             // Return 'false' to indicate they gave up
+            session.userData.plz = session.message.text;
+            session.save();
             session.endDialogWithResult({ response: true });
         })
         .onDefault(function (session) {
@@ -51,7 +53,10 @@ exports.hrQuestionsDialog = {
             //} else {
                 // Re-prompt user
                 //session.send(session.dialogData.retryPrompt);
-                session.send( dialog_messages["unclear-user-response"] );
+                session.send( 
+                    dialog_messages["unclear-user-response"] +
+                    dialog_messages["invalid-response-plz"] 
+                );
             //}
         }),
 
@@ -70,6 +75,8 @@ exports.hrQuestionsDialog = {
         })
         .matches(/\d+/i, function (session) {
             // Return 'false' to indicate they gave up
+            session.userData.wohnflaeche = session.message.text;
+            session.save();
             session.endDialogWithResult({ response: true });
         })
         .onDefault(function (session) {
@@ -84,6 +91,21 @@ exports.hrQuestionsDialog = {
             //}
         }),
 
+}
+
+exports.calculateHrTarif = function(plz, wohnflaeche, tarif){
+    /*    
+        {"tarifHv" : "C", "selbstbeteiligung" : true,"wohnflaeche" : 150,"glasversicherung" : true,"hrPlz" : 66822}
+        http://nb767.cosmos.local:8087/hausratRechnen
+        http://15c6931e.ngrok.io
+    */
+    if (tarif == 'B'){
+        return 1.11;
+    } else if (tarif == 'C'){
+        return 2.22;
+    } else {
+        return false;
+    }
 }
 
 

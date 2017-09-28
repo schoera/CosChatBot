@@ -4,5 +4,6 @@ exports.msg = {
     "user-abort": "ABBRUCH", // TODO
 
     "hr-question-plz": "Nennst Du uns Deine Postleitzahl?", // "Wo wohnst Du (PLZ)",
+    "invalid-response-plz": "Bitte nur 5-stellige PLZ angeben",
     "hr-question-wohnflaeche": "Wie viel Quadratmeter Wohnfläche hast Du?",
 }
