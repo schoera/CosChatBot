@@ -22,16 +22,33 @@ var connector = new builder.ChatConnector({
 // Listen for messages from users
 server.post('/api/messages', connector.listen());
 
-var username;
 
+// Receive messages from the user and respond by echoing each message back (prefixed with 'You said:')
+var bot = new builder.UniversalBot(connector, [
+    function (session) {
+        session.beginDialog('meaningOfLife', {});
+    },
+    function (session, results) {
+        // Check their answer
+        if (results.response) {
+            session.send("That's correct! You are wise beyond your years...");
+        } else {
+            session.send("Sorry you couldn't figure it out. Everyone knows that the meaning of life is 42.");
+        }
+    }
+]);
+
+
+bot.dialog('meaningOfLife', dialog_modules.meaningOfLifeDialog);
+
+/*
 // Receive messages from the user and respond by echoing each message back (prefixed with 'You said:')
 var bot = new builder.UniversalBot(connector, function (session) {
   bot.set('persistConversationData', true);
   
-  /* *** DIALOG GOES HERE *** */
-
   var msg = session.message;
   //if (initial == 0) {
+ 
   if (false && !username) {
     session.beginDialog('greetings');
   } else if (msg.attachments && msg.attachments.length > 0) {
@@ -42,6 +59,7 @@ var bot = new builder.UniversalBot(connector, function (session) {
       session.send( dialog_modules.echo(session) );
   }
 });
+*/
 
 
 
