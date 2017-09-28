@@ -1,9 +1,5 @@
 {
-<<<<<<< HEAD
   "name": "Cosmos HR-Angebot ChatBot",
-=======
-  "name": "CosChatBot",
->>>>>>> f46e62c556caf9513aedb0f9d71411eb0d6f695a
   "version": "1.0.0",
   "description": "chatbot @ fedexday 2017",
   "main": "bot.js",
