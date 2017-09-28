@@ -5,6 +5,8 @@ var restify = require('restify');
 var builder = require('botbuilder');
 var dialog_modules = require('./dialog_modules');
 
+// Test-Kommentar für Testpush
+
 // Setup Restify Server
 var server = restify.createServer();
 server.listen(process.env.port || process.env.PORT || 3978, function () {
@@ -62,10 +64,10 @@ bot.dialog('meaningOfLife', dialog_modules.meaningOfLifeDialog);
 // Receive messages from the user and respond by echoing each message back (prefixed with 'You said:')
 var bot = new builder.UniversalBot(connector, function (session) {
   bot.set('persistConversationData', true);
-  
+
   var msg = session.message;
   //if (initial == 0) {
- 
+
   if (false && !username) {
     session.beginDialog('greetings');
   } else if (msg.attachments && msg.attachments.length > 0) {
