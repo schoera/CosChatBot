@@ -99,13 +99,23 @@ exports.calculateHrTarif = function(plz, wohnflaeche, tarif){
         http://nb767.cosmos.local:8087/hausratRechnen
         http://15c6931e.ngrok.io/hausratRechnen
     */
-    if (tarif == 'B'){
-        return 1.11;
-    } else if (tarif == 'C'){
-        return 2.22;
-    } else {
-        return false;
+  return postRest(tarif, wohnflaeche, tarif);
+}
+
+exports.postRest = function(tarifHv, wohnflaeche, hrPlz) {
+  // Sending and receiving data in JSON format using POST method
+  var xhr = new XMLHttpRequest();
+  var url = "http://15c6931e.ngrok.io/hausratRechnen";
+  xhr.open("POST", url, true);
+  xhr.setRequestHeader("Content-type", "application/json");
+  xhr.onreadystatechange = function () {
+    if (xhr.readyState === 4 && xhr.status === 200) {
+      var json = JSON.parse(xhr.responseText);
+      console.log(json);
     }
+  };
+  var data = JSON.stringify('{"tarifHv" : "' + tarifHv + '", "selbstbeteiligung" : true, "wohnflaeche" : ' + wohnflaeche + ', "glasversicherung" : true, "hrPlz" : ' + hrPlz + '}');
+  xhr.send(data);
 }
 
 
