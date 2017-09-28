@@ -3,19 +3,13 @@ require('dotenv-extended').load();
 
 var restify = require('restify');
 var builder = require('botbuilder');
-var zitate = require('./zitate');
+var dialog_modules = require('./dialog_modules');
 
 // Setup Restify Server
 var server = restify.createServer();
 server.listen(process.env.port || process.env.PORT || 3978, function () {
    console.log('Bot hört auf: %s', server.url);
 });
-
-function getRandomIntInclusive(min, max) {
-  min = Math.ceil(min);
-  max = Math.floor(max);
-  return Math.floor(Math.random() * (max - min +1)) + min; 
-}
 
 // Create chat connector for communicating with the Bot Framework Service
 var connector = new builder.ChatConnector({
@@ -34,50 +28,40 @@ var username;
 var bot = new builder.UniversalBot(connector, function (session) {
   bot.set('persistConversationData', true);
   
+  /* *** DIALOG GOES HERE *** */
+
   var msg = session.message;
   //if (initial == 0) {
-  if (!username) {
+  if (false && !username) {
     session.beginDialog('greetings');
-  }  
-  else if (msg.attachments && msg.attachments.length > 0) {
+  } else if (msg.attachments && msg.attachments.length > 0) {
     // Echo back attachment
-    var attachment = msg.attachments[0];
-    session.send({
-      text: "Bud sagt: ",
-      attachments: [
-        {
-          contentType: attachment.contentType,
-          contentUrl: attachment.contentUrl,
-          name: attachment.name
-        }
-      ]
-    });
+    session.send( dialog_modules.echo_attachment(session) );
   } else {
-    // Echo back users text
-    if(session.message.text=="!spruch") {
-      session.send(zitate.zitate[getRandomIntInclusive(0,10)]);
-    }
-    else {    
-      session.send("Bud sagt: %s", session.message.text);
-    }
+      //session.send("echo: %s", session.message.text);
+      session.send( dialog_modules.echo(session) );
   }
 });
 
+
+
+/*
 // Ask the user for their name and greet them by name.
 bot.dialog('greetings', [
-    function (session) {
-        session.beginDialog('askName');
-    },
-    function (session, results) {
-        session.endDialog(`Hallo ${results.response}, folgende Befehle stehen dir zur Verfügung: !spruch`);
-    }
+  function (session) {
+      session.beginDialog('askName');
+  },
+  function (session, results) {
+      session.endDialog(`Hallo ${results.response}, folgende Befehle stehen dir zur Verfügung: !spruch`);
+  }
 ]);
 bot.dialog('askName', [
-    function (session) {
-        builder.Prompts.text(session, 'Hallo unbekannter Nutzer, der Budbot begrüßt dich. Verrätst du mir deinen Namen?');
-    },
-    function (session, results) {
-        session.endDialogWithResult(results);
-        username = results.response;
-    }
+  function (session) {
+      builder.Prompts.text(session, 'Hallo unbekannter Nutzer, der Budbot begrüßt dich. Verrätst du mir deinen Namen?');
+  },
+  function (session, results) {
+      session.endDialogWithResult(results);
+      username = results.response;
+  }
 ]);
+*/
