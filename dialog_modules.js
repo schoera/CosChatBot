@@ -7,7 +7,7 @@ var restify = require('restify-clients');
 var log = require('./log');
 var calculation_service_url_internal = "http://nb767.cosmos.local:8087";
 var calculation_service_url_external = "https://15c6931e.ngrok.io";
-var calculation_service_url = (process.env.INTERNAL_CALL || true) ? calculation_service_url_internal : calculation_service_url_external;
+var calculation_service_url = (process.env.INTERNAL_CALL || false) ? calculation_service_url_internal : calculation_service_url_external;
 
 var restClient = restify.createJsonClient({
   url: calculation_service_url,
