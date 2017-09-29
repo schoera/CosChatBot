@@ -161,8 +161,11 @@ var getTarifCard = function(session, calcResponse, tarifForceKey){
         ])
         .buttons([
             builder.CardAction.openUrl(session,
+                'http://nb767.cosmos.local:8081/CosmosCAE/S/cosmos/hausratversicherung/#beitrag-berechnen!app-hausrat-versicherung?id=eyJjdHkiOiJ0ZXh0XC9wbGFpbiIsImFsZyI6IkhTMjU2In0.W3sid29obmZsYWVjaGUiOjc4LCJwbHoiOiI0OTQ3NyIsImx6IjoxMCwienciOiIxMiIsInNiIjowLCJndiI6IjEiLCJtaWNyb3R5cGUiOiIyMDAwMCJ9XQ.2RarG4yWkA02IYEQQzM4TgZ6VFlytF27WUQLol-OTtY',
+                'Tarif Infos ...'
+            ),
+            builder.CardAction.openUrl(session,
                 'http://nb767.cosmos.local:8081/CosmosCAE/S/cosmos/hausratversicherung/#beitrag-berechnen!app-hausrat-versicherung?id='+calcResponse['saveJwt'],
-                //'http://cosmosdirekt.de/hausratversicherung/#beitrag-berechnen!app-hausrat-versicherung?id='+calcResponse['saveJwt'],
                 'Jetzt Abschliessen'
             )
         ])
