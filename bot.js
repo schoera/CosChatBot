@@ -49,7 +49,7 @@ var bot = new builder.UniversalBot(connector, [
       var plz = session.userData.plz,
         wohnflaeche = session.userData.wohnflaeche;
       dialog_modules.calculateHrTarif(plz, wohnflaeche, "B").then(function(basis) {
-        dialog_modules.calculateHrTarif(plz, wohnflaeche, "C").then(function (comfort) {
+        dialog_modules.calculateHrTarif(plz, wohnflaeche, "C").then(function(comfort) {
           session.send(
             "OK, Danke ... hier kommt die Berechnung\n" +
             //"Daten: PLZ "+ session.userData.plz +" Wohnfläche "+ session.userData.wohnflaeche +"\n"+

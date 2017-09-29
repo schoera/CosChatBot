@@ -1,11 +1,16 @@
+// This loads the environment variables from the .env file
+require('dotenv-extended').load();
 
 var builder = require('botbuilder');
 var dialog_messages = require('./dialog_msg').msg;
 var restify = require('restify-clients');
+var calculation_service_url_internal = "http://nb767.cosmos.local:8087";
+var calculation_service_url_external = "https://15c6931e.ngrok.io";
+var calculation_service_url = (process.env.INTERNAL_CALL || false) ? calculation_service_url_internal : calculation_service_url_external;
+
 
 var restClient = restify.createJsonClient({
-  url: 'https://15c6931e.ngrok.io',
-  //url: 'http://nb767.cosmos.local:8087',
+  url: calculation_service_url,
   version: '*'
 });
 
@@ -109,7 +114,7 @@ exports.calculateHrTarif = function(plz, wohnflaeche, tarif){
     function (resolve, reject) {
       restClient.post('/hausratRechnen', jsonObject, function(error, request, response, responseObject) {
         //assert.ifError(err);
-        if(response.statusCode !== 200) {
+        if((response.statusCode !== 200) || responseObject.hasOwnProperty("fehlerText")) {
           console.log("Fehler mit Statuscode: " + response.statusCode);
           console.log('%j', responseObject);
           console.log('%j', response.headers);
