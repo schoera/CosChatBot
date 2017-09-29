@@ -45,7 +45,37 @@ var service_error_handler = function(session){
 };
 
 // Receive messages from the user and respond by echoing each message back (prefixed with 'You said:')
-var bot = new builder.UniversalBot(connector, [
+var bot = new builder.UniversalBot(connector, 
+    function (session) {
+        session.beginDialog('hr_angebot', {});
+        //session.send( dialog_modules.exampleCards(session) );
+    }
+);
+
+/*
+bot.on('conversationUpdate', function (message) {
+    if (message.membersAdded && message.membersAdded.length > 0) {
+        var membersAdded = message.membersAdded
+            .map(function (m) {
+                var isSelf = m.id === message.address.bot.id;
+                return (isSelf ? message.address.bot.name : m.name) || '' + ' (Id: ' + m.id + ')';
+            })
+            .join(', ');
+
+        if (membersAdded == "User") {
+            bot.send(
+                new builder.Message()
+                .address(message.address)
+                .text( dialog_messages["welcome"] ) // 'Welcome ' + membersAdded
+            );
+        }
+    }
+});
+*/
+
+
+//bot.dialog('hr_angebot', dialog_modules.hrAngebotDialogWaterfall);
+bot.dialog('hr_angebot', [
     function (session) {
         session.beginDialog('hr_question_plz', {});
         //session.send( dialog_modules.exampleCards(session) );
@@ -73,28 +103,6 @@ var bot = new builder.UniversalBot(connector, [
         },service_error_handler(session));
     })
 ]);
-
-/*
-bot.on('conversationUpdate', function (message) {
-    if (message.membersAdded && message.membersAdded.length > 0) {
-        var membersAdded = message.membersAdded
-            .map(function (m) {
-                var isSelf = m.id === message.address.bot.id;
-                return (isSelf ? message.address.bot.name : m.name) || '' + ' (Id: ' + m.id + ')';
-            })
-            .join(', ');
-
-        if (membersAdded == "User") {
-            bot.send(
-                new builder.Message()
-                .address(message.address)
-                .text( dialog_messages["welcome"] ) // 'Welcome ' + membersAdded
-            );
-        }
-    }
-});
-*/
-
 
 bot.dialog('hr_question_plz', dialog_modules.hrQuestionsDialog['plz']);
 bot.dialog('hr_question_wohnflaeche', dialog_modules.hrQuestionsDialog['wohnflaeche']);
