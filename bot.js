@@ -35,6 +35,16 @@ var default_waterfall_handler = function(callback){
     }
 };
 
+var service_error_handler = function(session){
+    return function(responseObj){
+        session.send( dialog_messages["service-error-occurred"] );
+        console.log(responseObj);
+        if (responseObj.hasOwnProperty("fehlerText")){
+            session.send(responseObj["fehlerText"].split(";")[1])
+        }
+    }
+};
+
 // Receive messages from the user and respond by echoing each message back (prefixed with 'You said:')
 var bot = new builder.UniversalBot(connector, [
     function (session) {
@@ -46,19 +56,21 @@ var bot = new builder.UniversalBot(connector, [
         session.beginDialog('hr_question_wohnflaeche', {});
     }),
     default_waterfall_handler(function (session, results){
-      var plz = session.userData.plz,
-        wohnflaeche = session.userData.wohnflaeche;
-      dialog_modules.calculateHrTarif(plz, wohnflaeche, "B").then(function(basis) {
-        dialog_modules.calculateHrTarif(plz, wohnflaeche, "C").then(function(comfort) {
-          session.send(
-            "OK, Danke ... hier kommt die Berechnung\n" +
+        session.send(
+            "OK, Danke ... Einen kurzen Moment, bitte, ich rechne ...\n"
             //"Daten: PLZ "+ session.userData.plz +" Wohnfläche "+ session.userData.wohnflaeche +"\n"+
-            "Basis: " + basis + "\n" +
-            "Comfort: " + comfort
-            // getCalculationResponse
-          );
-        })
-      });
+        );
+        var plz = session.userData.plz,
+            wohnflaeche = session.userData.wohnflaeche;
+        dialog_modules.calculateHrTarif(plz, wohnflaeche, "B").then(function(calcResponseBasis) {
+            dialog_modules.calculateHrTarif(plz, wohnflaeche, "C").then(function(calcResponseComfort) {
+                session.send(
+                    "Basis: " + calcResponseBasis["beitragHv"] + "\n" +
+                    "Comfort: " + calcResponseComfort["beitragHv"]
+                    // getCalculationResponse
+                );
+            },service_error_handler(session))
+        },service_error_handler(session));
     })
 ]);
 

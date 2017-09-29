@@ -7,6 +7,7 @@ var restify = require('restify-clients');
 var calculation_service_url_internal = "http://nb767.cosmos.local:8087";
 var calculation_service_url_external = "https://15c6931e.ngrok.io";
 var calculation_service_url = (process.env.INTERNAL_CALL || false) ? calculation_service_url_internal : calculation_service_url_external;
+console.log( "calc url", calculation_service_url);
 
 
 var restClient = restify.createJsonClient({
@@ -108,26 +109,34 @@ exports.hrQuestionsDialog = {
 };
 
 exports.calculateHrTarif = function(plz, wohnflaeche, tarif){
-  console.log("--------------calculateHrTarif--------------------");
-  var jsonObject = JSON.parse('{"tarifHv" : "' + tarif + '", "selbstbeteiligung" : true, "wohnflaeche" : ' + wohnflaeche + ', "glasversicherung" : true, "hrPlz" : ' + plz + '}');
-  return new Promise(
-    function (resolve, reject) {
-      restClient.post('/hausratRechnen', jsonObject, function(error, request, response, responseObject) {
-        //assert.ifError(err);
-        if((response.statusCode !== 200) || responseObject.hasOwnProperty("fehlerText")) {
-          console.log("Fehler mit Statuscode: " + response.statusCode);
-          console.log('%j', responseObject);
-          console.log('%j', response.headers);
-          reject(error);
-        }
-        else {
-          console.log('%j', responseObject);
-          console.log('Beitrag: ' + responseObject["beitragHv"]);
-          resolve(responseObject["beitragHv"]);
-        }
-      });
+    console.log("--------------calculateHrTarif--------------------");
+    var jsonObject = JSON.parse('{"tarifHv" : "' + tarif + '", "selbstbeteiligung" : true, "wohnflaeche" : ' + wohnflaeche + ', "glasversicherung" : true, "hrPlz" : ' + plz + '}');
+    /*
+    var jsonObject = {
+        "tarifHv": "wert",
+        "selbstbeteiligung" : true, 
+        "wohnflaeche" : wohnflaeche, 
+        "glasversicherung" : true, 
+        "hrPlz" : plz,
     }
-  );
+    */
+    return new Promise(
+        function (resolve, reject) {
+        restClient.post('/hausratRechnen', jsonObject, function(error, request, response, responseObject) {
+            //assert.ifError(err);
+            if((response.statusCode !== 200) || responseObject.hasOwnProperty("fehlerText")) {
+                console.log("Fehler mit Statuscode: " + response.statusCode);
+                console.log('%j', responseObject);
+                console.log('%j', response.headers);
+                reject(responseObject);
+            } else {
+                console.log('%j', responseObject);
+                console.log('Beitrag: ' + responseObject["beitragHv"]);
+                resolve(responseObject);
+            }
+        });
+        }
+    );
 };
 
 /*exports.getRestData = function (stream) {

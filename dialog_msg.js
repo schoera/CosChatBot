@@ -2,6 +2,7 @@ exports.msg = {
   "welcome": "Hallo, Du möchtest Deinen Hausrat versichern? Hierfür brauche ich ein paar Angaben ...",
   "unclear-user-response": "Ich konnte Deine Antwort leider nicht verstehen. ",
   "user-abort": "ABBRUCH", // TODO
+  "service-error-occurred": "UPS, es ist ein Fehler passiert ...",
 
   "hr-question-plz": "Hallo! Schön, dass Du Dich für eine Hausratversicherung interessierst - eine wichtige Sache! Wir brauchen lediglich ein paar Angaben von Dir und schon kann es losgehen. Wie lautet bitte Deine Postleitzahl?",
   "invalid-response-plz": "Bitte gib' im Textfeld einfach Deine fünfstellige Postleitzahl an",
