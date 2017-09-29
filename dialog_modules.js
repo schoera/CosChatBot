@@ -4,6 +4,7 @@ require('dotenv-extended').load();
 var builder = require('botbuilder');
 var dialog_messages = require('./dialog_msg').msg;
 var restify = require('restify-clients');
+var log = require('./log');
 var calculation_service_url_internal = "http://nb767.cosmos.local:8087";
 var calculation_service_url_external = "https://15c6931e.ngrok.io";
 var calculation_service_url = (process.env.INTERNAL_CALL || false) ? calculation_service_url_internal : calculation_service_url_external;
@@ -91,8 +92,15 @@ exports.hrQuestionsDialog = {
         .matches(/\d+/i, function (session) {
             // Return 'false' to indicate they gave up
             session.userData.wohnflaeche = session.message.text.match(/(\d+)/)[0];
-            session.save();
-            session.endDialogWithResult({ response: true });
+            // umwandeln in integer
+            session.userData.wohnflaeche = session.userData.wohnflaeche*1;
+            if((session.userData.wohnflaeche < 24) || (session.userData.wohnflaeche > 193)) {
+              session.send(dialog_messages["invalid-response-wohnflaeche"] );
+            }
+            else {
+              session.save();
+              session.endDialogWithResult({ response: true });
+            }
         })
         .onDefault(function (session) {
             // Validate users reply.
@@ -102,14 +110,13 @@ exports.hrQuestionsDialog = {
             //} else {
                 // Re-prompt user
                 //session.send(session.dialogData.retryPrompt);
-                session.send( dialog_messages["unclear-user-response"] );
+                session.send(dialog_messages["unclear-user-response"] );
             //}
         })
 
 };
 
 exports.calculateHrTarif = function(plz, wohnflaeche, tarif){
-    console.log("--------------calculateHrTarif--------------------");
     var jsonObject = JSON.parse('{"tarifHv" : "' + tarif + '", "selbstbeteiligung" : true, "wohnflaeche" : ' + wohnflaeche + ', "glasversicherung" : true, "hrPlz" : ' + plz + '}');
     /*
     var jsonObject = {
@@ -139,56 +146,7 @@ exports.calculateHrTarif = function(plz, wohnflaeche, tarif){
     );
 };
 
-/*exports.getRestData = function (stream) {
-  return new Promise(
-    function (resolve, reject) {
-      var requestData = {
-        url: 'http://15c6931e.ngrok.io/hausratRechnen',
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      };
-
-      request.post(requestData, function (error, response, body) {
-        if (error) {
-          reject(error);
-        }
-        else if (response.statusCode !== 200) {
-          reject(body);
-        }
-        else {
-          resolve(JSON.parse(body).visuallySimilarProducts);
-        }
-      });
-    }
-  );
-};  */
-
-/*exports.calculateHrTarif = function(plz, wohnflaeche, tarif){
-  /*
-   {"tarifHv" : "C", "selbstbeteiligung" : true,"wohnflaeche" : 150,"glasversicherung" : true,"hrPlz" : 66822}
-   http://nb767.cosmos.local:8087/hausratRechnen
-   http://15c6931e.ngrok.io/hausratRechnen
-   */
-  // Sending and receiving data in JSON format using POST method
-  /*var xhr = new XMLHttpRequest();
-  var url = "http://15c6931e.ngrok.io/hausratRechnen";
-  xhr.open("POST", url, true);
-  xhr.setRequestHeader("Content-type", "application/json");
-  xhr.onreadystatechange = function () {
-    if (xhr.readyState === 4 && xhr.status === 200) {
-      var json = JSON.parse(xhr.responseText);
-      console.log(json);
-    }
-  };
-  var data = JSON.stringify('{"tarifHv" : "' + tarif + '", "selbstbeteiligung" : true, "wohnflaeche" : ' + wohnflaeche + ', "glasversicherung" : true, "hrPlz" : ' + plz + '}');
-  xhr.send(data);
-}    */
-
-
-
 /** EXAMPLES **/
-
 
 exports.meaningOfLifeDialog = new builder.IntentDialog()
     .onBegin(function (session, args) {
