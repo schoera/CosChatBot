@@ -4,8 +4,8 @@ var dialog_messages = require('./dialog_msg').msg;
 var restify = require('restify-clients');
 
 var restClient = restify.createJsonClient({
-  //url: 'http://15c6931e.ngrok.io',
-  url: 'http://nb767.cosmos.local:8087',
+  url: 'https://15c6931e.ngrok.io',
+  //url: 'http://nb767.cosmos.local:8087',
   version: '*'
 });
 
@@ -116,7 +116,7 @@ exports.calculateHrTarif = function(plz, wohnflaeche, tarif){
           reject(error);
         }
         else {
-          //console.log('%j', responseObject);
+          console.log('%j', responseObject);
           console.log('Beitrag: ' + responseObject["beitragHv"]);
           resolve(responseObject["beitragHv"]);
         }
