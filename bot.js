@@ -52,7 +52,7 @@ var bot = new builder.UniversalBot(connector,
     }
 );
 
-/*
+
 bot.on('conversationUpdate', function (message) {
     if (message.membersAdded && message.membersAdded.length > 0) {
         var membersAdded = message.membersAdded
@@ -71,7 +71,7 @@ bot.on('conversationUpdate', function (message) {
         }
     }
 });
-*/
+
 
 
 //bot.dialog('hr_angebot', dialog_modules.hrAngebotDialogWaterfall);
