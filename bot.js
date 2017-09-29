@@ -47,7 +47,11 @@ var service_error_handler = function(session){
 // Receive messages from the user and respond by echoing each message back (prefixed with 'You said:')
 var bot = new builder.UniversalBot(connector, 
     function (session) {
-        session.beginDialog('hr_angebot', {});
+        if (session.message.text.match(/team/i)){
+            session.send(dialog_modules.teamCard(session));
+        } else {
+            session.beginDialog('hr_angebot', {});
+        }
         //session.send( dialog_modules.exampleCards(session) );
     }
 );
@@ -106,3 +110,5 @@ bot.dialog('hr_angebot', [
 
 bot.dialog('hr_question_plz', dialog_modules.hrQuestionsDialog['plz']);
 bot.dialog('hr_question_wohnflaeche', dialog_modules.hrQuestionsDialog['wohnflaeche']);
+
+

@@ -20,4 +20,6 @@ exports.msg = {
   "hr-resultcard-text-tarifCSH": "Sichern Sie sich den Comfort-Tarif inklusive Smarthome-Gerät.",
   "hr-resultcard-image-tarifCSH": "http://nb767.cosmos.local:8087/bild/CSH", // "https://www.cosmosdirekt.de/CosmosCAE/S/linkableblob/home/210500-18542/data.png",
 
+  "team-image": "http://nb767.cosmos.local:8087/bild/TEAM", 
+
 }

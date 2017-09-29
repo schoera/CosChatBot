@@ -168,7 +168,7 @@ var getTarifCard = function(session, calcResponse, tarifForceKey){
                 'http://nb767.cosmos.local:8081/CosmosCAE/S/cosmos/hausratversicherung/#beitrag-berechnen!app-hausrat-versicherung?id='+calcResponse['saveJwt'],
                 'Jetzt Abschliessen'
             )
-        ])
+        ]);
 }
 
 exports.getCalculationResponse = function(session, calcResponseBasis, calcResponseComfort){
@@ -179,7 +179,20 @@ exports.getCalculationResponse = function(session, calcResponseBasis, calcRespon
             getTarifCard(session, calcResponseComfort),
             getTarifCard(session, calcResponseComfort, "CSH"),
         ]);
-}
+};
+
+exports.teamCard = function(session){
+    return new builder.Message(session).addAttachment(
+        new builder.HeroCard(session)
+            .title( "ChatBot TEAM" )
+            .text("Dieses unfassbar gutaussehende Team hat diesen Bot in nicht mal 24h auf die Beine gestellt...")
+            .images([
+                builder.CardImage.create(session,
+                    dialog_messages['team-image']
+                )
+            ])
+    );
+};
 
 /** EXAMPLES **/
 
