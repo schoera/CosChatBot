@@ -49,6 +49,8 @@ var bot = new builder.UniversalBot(connector,
     function (session) {
         if (session.message.text.match(/team/i)){
             session.send(dialog_modules.teamCard(session));
+        } else if (session.message.text.match(/info/i)){
+            session.send(dialog_modules.infoCards(session));
         } else {
             session.beginDialog('hr_angebot', {});
         }
@@ -76,7 +78,18 @@ bot.on('conversationUpdate', function (message) {
     }
 });
 
-
+bot.dialog('hr_info',[
+    function (session) {
+        //session.beginDialog('hr_question_plz', {});
+        builder.Prompts.choice(session,
+            "Infos?", "Info|Rechnen"
+        );
+    },
+    function (session, results){
+        console.log(session.response);
+        session.send(dialog_modules.infoCards(session));
+    }
+]);
 
 //bot.dialog('hr_angebot', dialog_modules.hrAngebotDialogWaterfall);
 bot.dialog('hr_angebot', [
@@ -103,6 +116,9 @@ bot.dialog('hr_angebot', [
                     //"Comfort: " + calcResponseComfort["beitragHv"]
                     dialog_modules.getCalculationResponse(session, calcResponseBasis, calcResponseComfort)
                 );
+                /// show 
+                session.beginDialog('hr_info', {});
+
             },service_error_handler(session))
         },service_error_handler(session));
     })

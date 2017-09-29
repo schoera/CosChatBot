@@ -220,60 +220,30 @@ exports.meaningOfLifeDialog = new builder.IntentDialog()
         }
     });
 
-exports.exampleCards = function(session){
-    var exampleCards = {
-        "hero1": new builder.HeroCard(session)
-            .title('Azure Storage')
-            .subtitle('Offload the heavy lifting of data center management')
-            .text('Store and help protect your data. Get durable, highly available data storage across the globe and pay only for what you use.')
+exports.infoCards = function(session){
+    var cards = [
+        new builder.HeroCard(session)
+            .title('Leitungswasser')
+            .subtitle('Schadenbeispiel: Der Kunde verließ am Morgen das Haus. Im Laufe des Vormittags platzte ein Filter der Wasserzuleitung seiner Waschmaschine. Als er gegen Mittag nach hause kam, hatte sich das ausgetretene Wasser im kompletten Erdgeschoss über die gesamte Wohnfläche verteilt.') //.text('')
             .images([
-                builder.CardImage.create(session, 'https://docs.microsoft.com/en-us/azure/storage/media/storage-introduction/storage-concepts.png')
-            ])
-            .buttons([
-                builder.CardAction.openUrl(session, 'https://azure.microsoft.com/en-us/services/storage/', 'Learn More')
+                builder.CardImage.create(session, 'https://www.cosmosdirekt.de/CosmosCAE/S/linkableblob/home/102010-15572/data.jpg')
             ]),
-
-        "thumb1": new builder.ThumbnailCard(session)
-            .title('DocumentDB')
-            .subtitle('Blazing fast, planet-scale NoSQL')
-            .text('NoSQL service for highly available, globally distributed apps—take full advantage of SQL and JavaScript over document and key-value data without the hassles of on-premises or virtual machine-based cloud database options.')
+        new builder.HeroCard(session)
+            .title('Wohnungsbrand')
+            .subtitle('Schadenbeispiel: Durch einen Kurzschluss fing der Wäsche­trockner Feuer und brannte aus. Alle Versorgungs­leitungen waren verschmort. Aufgrund der starken Rauch- und Ruß­entwicklung war das Haus vorüber­gehend nicht bewohnbar.') //.text('')
             .images([
-                builder.CardImage.create(session, 'https://docs.microsoft.com/en-us/azure/documentdb/media/documentdb-introduction/json-database-resources1.png')
-            ])
-            .buttons([
-                builder.CardAction.openUrl(session, 'https://azure.microsoft.com/en-us/services/documentdb/', 'Learn More')
+                builder.CardImage.create(session, 'https://www.cosmosdirekt.de/CosmosCAE/S/linkableblob/home/102020-15570/data.jpg')
             ]),
-
-        "hero2": new builder.HeroCard(session)
-            .title('Azure Functions')
-            .subtitle('Process events with a serverless code architecture')
-            .text('An event-based serverless compute experience to accelerate your development. It can scale based on demand and you pay only for the resources you consume.')
+        new builder.HeroCard(session)
+            .title('Einbruch­diebstahl und Vandalismus')
+            .subtitle('Schadenbeispiel: Der Einbruch fand statt, als die Eltern auf der Arbeit waren und die Kinder in der Schule. Die Eingangs­tür des Mehr­familien­hauses war verschlossen. Die Wohnungstür wurde aufgebrochen und die Wohnung komplett verwüstet. Wert­sachen wie Schmuck und Elektro­geräte wurden ent­wendet.') //.text('')
             .images([
-                builder.CardImage.create(session, 'https://azurecomcdn.azureedge.net/cvt-5daae9212bb433ad0510fbfbff44121ac7c759adc284d7a43d60dbbf2358a07a/images/page/services/functions/01-develop.png')
-            ])
-            .buttons([
-                builder.CardAction.openUrl(session, 'https://azure.microsoft.com/en-us/services/functions/', 'Learn More')
+                builder.CardImage.create(session, 'https://www.cosmosdirekt.de/CosmosCAE/S/linkableblob/home/102030-15571/data.jpg')
             ]),
-
-        "thumb2": new builder.ThumbnailCard(session)
-            .title('Cognitive Services')
-            .subtitle('Build powerful intelligence into your applications to enable natural and contextual interactions')
-            .text('Enable natural and contextual interaction with tools that augment users\' experiences using the power of machine-based intelligence. Tap into an ever-growing collection of powerful artificial intelligence algorithms for vision, speech, language, and knowledge.')
-            .images([
-                builder.CardImage.create(session, 'https://azurecomcdn.azureedge.net/cvt-68b530dac63f0ccae8466a2610289af04bdc67ee0bfbc2d5e526b8efd10af05a/images/page/services/cognitive-services/cognitive-services.png')
-            ])
-            .buttons([
-                builder.CardAction.openUrl(session, 'https://azure.microsoft.com/en-us/services/cognitive-services/', 'Learn More')
-            ])
-    };
+    ];
     return new builder.Message(session)
         .attachmentLayout(builder.AttachmentLayout.carousel)
-        .attachments([
-            exampleCards['hero1'],
-            exampleCards['hero2'],
-            exampleCards['thumb1'],
-            exampleCards['thumb2']
-        ]);
+        .attachments(cards);
 };
 
 // session.send( dialog_modules.exampleCards(session) );
