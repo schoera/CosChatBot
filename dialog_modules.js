@@ -119,9 +119,9 @@ exports.calculateHrTarif = function(plz, wohnflaeche, tarif){
     /*
     var jsonObject = {
         "tarifHv": "wert",
-        "selbstbeteiligung" : true, 
-        "wohnflaeche" : wohnflaeche, 
-        "glasversicherung" : true, 
+        "selbstbeteiligung" : true,
+        "wohnflaeche" : wohnflaeche,
+        "glasversicherung" : true,
         "hrPlz" : plz,
     }
     */
@@ -144,21 +144,25 @@ exports.calculateHrTarif = function(plz, wohnflaeche, tarif){
     );
 };
 
+var priceFormat = function (price) {
+    return price.toFixed(2).replace(".", ",");
+}
+
 var getTarifCard = function(session, calcResponse, tarifForceKey){
     var tarifKey = tarifForceKey || calcResponse['tarifHv'];
     return new builder.HeroCard(session)
         .title( dialog_messages['hr-resultcard-title-tarif'+tarifKey] )
-        .subtitle('Preis: '+ calcResponse['beitragHv'] +' €')
+        .subtitle('Preis: '+ priceFormat(calcResponse['beitragHv']) +' €')
         .text( dialog_messages['hr-resultcard-text-tarif'+tarifKey] )
         .images([
-            builder.CardImage.create(session, 
+            builder.CardImage.create(session,
                 dialog_messages['hr-resultcard-image-tarif'+tarifKey]
             )
         ])
         .buttons([
-            builder.CardAction.openUrl(session, 
+            builder.CardAction.openUrl(session,
                 'http://nb767.cosmos.local:8081/CosmosCAE/S/cosmos/hausratversicherung/#beitrag-berechnen!app-hausrat-versicherung?id='+calcResponse['saveJwt'],
-                //'http://cosmosdirekt.de/hausratversicherung/#beitrag-berechnen!app-hausrat-versicherung?id='+calcResponse['saveJwt'], 
+                //'http://cosmosdirekt.de/hausratversicherung/#beitrag-berechnen!app-hausrat-versicherung?id='+calcResponse['saveJwt'],
                 'Jetzt Abschliessen'
             )
         ])
