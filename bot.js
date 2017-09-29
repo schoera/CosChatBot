@@ -38,7 +38,6 @@ var default_waterfall_handler = function(callback){
 var service_error_handler = function(session){
     return function(responseObj){
         session.send( dialog_messages["service-error-occurred"] );
-        console.log(responseObj);
         if (responseObj.hasOwnProperty("fehlerText")){
             session.send(responseObj["fehlerText"].split(";")[1])
         }
@@ -65,9 +64,10 @@ var bot = new builder.UniversalBot(connector, [
         dialog_modules.calculateHrTarif(plz, wohnflaeche, "B").then(function(calcResponseBasis) {
             dialog_modules.calculateHrTarif(plz, wohnflaeche, "C").then(function(calcResponseComfort) {
                 session.send(
-                    "Basis: " + calcResponseBasis["beitragHv"] + "\n" +
-                    "Comfort: " + calcResponseComfort["beitragHv"]
-                    // getCalculationResponse
+
+                    //"Basis: " + calcResponseBasis["beitragHv"] + "\n" +
+                    //"Comfort: " + calcResponseComfort["beitragHv"]
+                    dialog_modules.getCalculationResponse(session, calcResponseBasis, calcResponseComfort)
                 );
             },service_error_handler(session))
         },service_error_handler(session));

@@ -146,6 +146,33 @@ exports.calculateHrTarif = function(plz, wohnflaeche, tarif){
     );
 };
 
+var getTarifCard = function(session, calcResponse){
+    return new builder.HeroCard(session)
+        .title(
+            'Basis-Tarif'
+        )
+        .subtitle('Preis: '+ calcResponse['beitragHv'] +' €')
+        .text('An event-based serverless compute experience to accelerate your development. It can scale based on demand and you pay only for the resources you consume.')
+        //.images([
+        //    builder.CardImage.create(session, 'https://azurecomcdn.azureedge.net/cvt-5daae9212bb433ad0510fbfbff44121ac7c759adc284d7a43d60dbbf2358a07a/images/page/services/functions/01-develop.png')
+        //])
+        .buttons([
+            builder.CardAction.openUrl(session, 
+                'https://azure.microsoft.com/en-us/services/functions/', 
+                'Jetzt Abschliessen'
+            )
+        ])
+}
+
+exports.getCalculationResponse = function(session, calcResponseBasis, calcResponseComfort){
+    return new builder.Message(session)
+        .attachmentLayout(builder.AttachmentLayout.carousel)
+        .attachments([
+            getTarifCard(session, calcResponseBasis),
+            getTarifCard(session, calcResponseComfort),
+        ]);
+}
+
 /** EXAMPLES **/
 
 exports.meaningOfLifeDialog = new builder.IntentDialog()
