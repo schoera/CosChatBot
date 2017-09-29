@@ -47,6 +47,7 @@ exports.hrQuestionsDialog = {
             // session.dialogData.retryPrompt = args.retryPrompt || dialog_messages["unclear-user-response"];
             // Send initial prompt
             // - This isn't a waterfall so you shouldn't call any of the built-in Prompts.
+            session.send( dialog_messages["welcome"] );
             session.send( dialog_messages["hr-question-plz"] );
         })
         .matches(abortMatcher(), function (session) {
