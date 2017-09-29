@@ -8,8 +8,6 @@ var log = require('./log');
 var calculation_service_url_internal = "http://nb767.cosmos.local:8087";
 var calculation_service_url_external = "https://15c6931e.ngrok.io";
 var calculation_service_url = (process.env.INTERNAL_CALL || true) ? calculation_service_url_internal : calculation_service_url_external;
-console.log( "calc url", calculation_service_url);
-
 
 var restClient = restify.createJsonClient({
   url: calculation_service_url,
@@ -132,13 +130,13 @@ exports.calculateHrTarif = function(plz, wohnflaeche, tarif){
         restClient.post('/hausratRechnen', jsonObject, function(error, request, response, responseObject) {
             //assert.ifError(err);
             if((response.statusCode !== 200) || responseObject.hasOwnProperty("fehlerText")) {
-                console.log("Fehler mit Statuscode: " + response.statusCode);
-                console.log('%j', responseObject);
-                console.log('%j', response.headers);
+                //console.log("Fehler mit Statuscode: " + response.statusCode);
+                //console.log('%j', responseObject);
+                //console.log('%j', response.headers);
                 reject(responseObject);
             } else {
-                console.log('%j', responseObject);
-                console.log('Beitrag: ' + responseObject["beitragHv"]);
+                //console.log('%j', responseObject);
+                //console.log('Beitrag: ' + responseObject["beitragHv"]);
                 resolve(responseObject);
             }
         });
