@@ -7,7 +7,7 @@ var restify = require('restify-clients');
 var log = require('./log');
 var calculation_service_url_internal = "http://nb767.cosmos.local:8087";
 var calculation_service_url_external = "https://15c6931e.ngrok.io";
-var calculation_service_url = (process.env.INTERNAL_CALL || false) ? calculation_service_url_internal : calculation_service_url_external;
+var calculation_service_url = (process.env.INTERNAL_CALL || true) ? calculation_service_url_internal : calculation_service_url_external;
 console.log( "calc url", calculation_service_url);
 
 
@@ -146,19 +146,21 @@ exports.calculateHrTarif = function(plz, wohnflaeche, tarif){
     );
 };
 
-var getTarifCard = function(session, calcResponse){
+var getTarifCard = function(session, calcResponse, tarifForceKey){
+    var tarifKey = tarifForceKey || calcResponse['tarifHv'];
     return new builder.HeroCard(session)
-        .title(
-            'Basis-Tarif'
-        )
+        .title( dialog_messages['hr-resultcard-title-tarif'+tarifKey] )
         .subtitle('Preis: '+ calcResponse['beitragHv'] +' €')
-        .text('An event-based serverless compute experience to accelerate your development. It can scale based on demand and you pay only for the resources you consume.')
-        //.images([
-        //    builder.CardImage.create(session, 'https://azurecomcdn.azureedge.net/cvt-5daae9212bb433ad0510fbfbff44121ac7c759adc284d7a43d60dbbf2358a07a/images/page/services/functions/01-develop.png')
-        //])
+        .text( dialog_messages['hr-resultcard-text-tarif'+tarifKey] )
+        .images([
+            builder.CardImage.create(session, 
+                dialog_messages['hr-resultcard-image-tarif'+tarifKey]
+            )
+        ])
         .buttons([
             builder.CardAction.openUrl(session, 
-                'https://azure.microsoft.com/en-us/services/functions/', 
+                'http://nb767.cosmos.local:8081/CosmosCAE/S/cosmos/hausratversicherung/#beitrag-berechnen!app-hausrat-versicherung?id='+calcResponse['saveJwt'],
+                //'http://cosmosdirekt.de/hausratversicherung/#beitrag-berechnen!app-hausrat-versicherung?id='+calcResponse['saveJwt'], 
                 'Jetzt Abschliessen'
             )
         ])
@@ -170,6 +172,7 @@ exports.getCalculationResponse = function(session, calcResponseBasis, calcRespon
         .attachments([
             getTarifCard(session, calcResponseBasis),
             getTarifCard(session, calcResponseComfort),
+            getTarifCard(session, calcResponseComfort, "CSH"),
         ]);
 }
 
